@@ -31,7 +31,8 @@ Ouvrir le dossier android dans front/client avec Android Studio
 Click 2 fois sur client.xcworkspace dans front/client/ios
 
 # Figma
-https://www.figma.com/file/r3NiuWSeYyhVBWwzvirjF0/Web?node-id=0%3A1
+https://www.figma.com/file/CB0Pu5gvOm2StlYoxVfVjx/Fashion-Brand-Store-Mobile-App-(Community)?node-id=3%3A102
+https://www.figma.com/file/0eHtnHexf68dtYO8wOcOW1/Instaglam-(Community)?node-id=4%3A870
 
 # Fastlane
 https://docs.fastlane.tools/best-practices/continuous-integration/gitlab/
