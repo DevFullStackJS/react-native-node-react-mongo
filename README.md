@@ -1,5 +1,8 @@
 # Dev fullstack
 
+# Pour environement
+- copie env dans .env
+
 # Instalation Web et api
 Ouvrir un terminal et acceder au racine de project
 - docker buildx install
