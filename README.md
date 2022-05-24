@@ -6,7 +6,7 @@ Ouvrir un terminal et acceder au racine de project
 - docker-compose up -d --build
 
 # url bo
-http://localhost:8008/
+http://localhost:4000
 
 # url swagger
 http://localhost:4000/api-docs/#/
@@ -14,7 +14,7 @@ http://localhost:4000/api-docs/#/
 
 # Instalation Mobile
 Ouvrir un autre terminal et acceder au racine de project
-- cd front/client
+- cd front/mobile
 - npm install --legacy-peer-deps
 - cd ios
 - pod install
