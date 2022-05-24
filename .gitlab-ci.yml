@@ -1,0 +1,129 @@
+variables:
+  DOCKER_API_VERSION: "1.39"
+
+stages:
+  - build
+
+.build_image: &build_image
+  stage: build
+  image: docker:latest
+  services:
+    - docker:18.09-dind
+  retry:
+    max: 1
+    when:
+      - script_failure
+  before_script:
+    - "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - "echo $ARG "
+  after_script:
+    - docker logout $CI_REGISTRY
+
+.modify_server_api:
+  only:
+    changes: &modify_server_api
+      - .gitlab-ci.yml
+      - back/api/**/*
+
+.modify_client_bo:
+  only:
+    changes: &modify_client_bo
+      - .gitlab-ci.yml
+      - back/bo/**/*
+
+.modify_client_front:
+  only:
+    changes: &modify_client_front
+      - .gitlab-ci.yml
+      - client/front/**/*
+
+.develop_only:
+  only:
+    refs: &develop_only
+      - develop
+.master_only:
+  only:
+    refs: &master_only
+      - master
+.tags_only:
+  only:
+    refs: &tags_only
+      - tags
+
+.build_bo: &build_bo
+  <<: *build_image
+  stage: build
+  variables:
+    IMAGE: IMAGE
+    FOLDER: ./back/bo
+    TAG: tag
+  script:
+    - docker build -t $IMAGE:$TAG $FOLDER
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $IMAGE:$TAG
+    - docker logout ${CI_REGISTRY}
+
+.build_front: &build_front
+  <<: *build_image
+  stage: build
+  variables:
+    IMAGE: IMAGE
+    FOLDER: ./front/client
+    TAG: tag
+  script:
+    - docker build -t $IMAGE:$TAG $FOLDER
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $IMAGE:$TAG
+    - docker logout ${CI_REGISTRY}
+
+.build_server: &build_server
+  <<: *build_image
+  variables:
+    IMAGE: IMAGE
+    TAG: tag
+    FOLDER: ./back/api
+    ARG: " --build-arg PRISMA_END_POINT=${PRISMA_END_POINT}"
+  script:
+    - docker build -t $IMAGE:$TAG $ARG $FOLDER
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $IMAGE:$TAG
+    - docker logout ${CI_REGISTRY}
+    - docker login --username=$USERNAME --password=$PASSWORD registry.heroku.com
+    - npm install -g heroku-cli
+    - heroku stack:set container --app guarded-harbor-97396
+    - heroku container:login
+    - docker buildx build --platform linux/amd64 -t registry.heroku.com/guarded-harbor-97396/web .
+    - docker push registry.heroku.com/guarded-harbor-97396/web
+    - heroku container:release web -a guarded-harbor-97396
+    - heroku open -a guarded-harbor-97396
+
+build_bo_staging:
+  <<: *build_bo
+  variables:
+    IMAGE: ${CI_REGISTRY_IMAGE}/bo/staging
+    FOLDER: ./back/bo
+    TAG: staging
+  only:
+    refs: *develop_only
+    changes: *modify_client_bo
+
+build_front_staging:
+  <<: *build_front
+  variables:
+    IMAGE: ${CI_REGISTRY_IMAGE}/front/staging
+    FOLDER: ./front/client
+    TAG: staging
+  only:
+    refs: *develop_only
+    changes: *modify_client_front
+
+build_server_staging:
+  <<: *build_server
+  variables:
+    IMAGE: ${CI_REGISTRY_IMAGE}/back/staging
+    TAG: staging
+    FOLDER: ./back/api
+    ARG: " --build-arg PRISMA_END_POINT=${STAGE_PRISMA_END_POINT}"
+  only:
+    refs: *develop_only
+    changes: *modify_server_api
