@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./VOLUMES/data:/data/db
+    ports:
+      - '27017:27017'
+
+  minio:
+    image: minio/minio:edge
+    ports:
+      - 9000:9000
+    volumes:
+      - ./VOLUMES/minio:/data
+    entrypoint: minio server /data
+    env_file:
+      - .env
+
+  # front:
+  #   build:
+  #     context: front/mobile
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./front/mobile/src:/app/src
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - .env
+
+  # bo:
+  #   build:
+  #     context: back/bo
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./back/bo/src:/app/src
+  #   ports:
+  #     - "3003:3003"
+  #   env_file:
+  #     - .env
+
+  backend:
+    container_name: docker-node-mongo
+    restart: always
+    image: backend-fullstack
+    build: "."
+    ports:
+      - "4000:4000"
+    # command: bash -c "while ! curl -s postgres:5432 > /dev/null; do echo waiting for mongodb to be ready ...; sleep 1; pg-god db-create -o postgres -w ${TYPEORM_PASSWORD} -n fullstack || true"
+    # entrypoint: bash -c "npm run ${SEED} && npm run ${ENTRYPOINT}"
+    # entrypoint: bash -c "npm run start"
+    depends_on:
+      # - minio
+      - mongo
+    external_links:
+      - mongo
+    volumes:
+      - ./VOLUMES/minio:/data/upload
+
+  # nginx:
+  #   image: nginx:1.19.10-alpine
+  #   ports:
+  #     - "6003:80"
+  #     - "6004:443"
+  #   volumes:
+  #     - ./data/nginx:/etc/nginx/conf.d
+  #     - ./data/certbot/conf:/etc/letsencrypt
+  #     - ./data/certbot/www:/var/www/certbot
+  #     - ./:/certs
+  #   command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+  #   depends_on:
+  #     - backend
+  #   links:
+  #     - fpm
