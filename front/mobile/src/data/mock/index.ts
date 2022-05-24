@@ -1,0 +1,92 @@
+import {images} from '../../presentation/resources/constants';
+
+export default {
+  onboarding: [
+    {
+      id: 1,
+      imageBackground: '',
+      image: images.onboarding,
+      title: 'Title 1',
+      description: 'Description 1',
+    },
+    {
+      id: 2,
+      imageBackground: '',
+      image: images.onboarding1,
+      title: 'Title 1',
+      description: 'Description 1',
+    },
+    {
+      id: 3,
+      imageBackground: '',
+      image: images.onboarding2,
+      title: 'Title 1',
+      description: 'Description 1',
+    },
+  ],
+  categories: [
+    {id: 1, name: 'All'},
+    {id: 2, name: 'Apparel'},
+    {id: 3, name: 'Dress'},
+    {id: 4, name: 'Tshirt'},
+    {id: 5, name: 'Bag'},
+    {id: 6, name: 'Kids'},
+  ],
+
+  products: [
+    {
+      id: 1,
+      name: 'lamerei',
+      size: ['M', 'L', 'X'],
+      color: ['black', 'red', 'white'],
+      image: images.collection,
+      description: '21WN reversible angora cardigan',
+      price: '19',
+    },
+    {
+      id: 2,
+      name: 'lamerei',
+      size: ['M', 'L', 'X'],
+      color: ['black', 'red', 'white'],
+      image: images.collection1,
+      description: 'Recycle Boucle Knit Cardigan Pink',
+      price: '7',
+    },
+    {
+      id: 3,
+      name: 'lamerei',
+      size: ['M', 'L', 'X'],
+      color: ['black', 'red', 'white'],
+      image: images.product4,
+      description: '21WN reversible angora cardigan',
+      price: '19',
+    },
+    {
+      id: 4,
+      name: 'lamerei',
+      size: ['M', 'L', 'X'],
+      color: ['black', 'red', 'white'],
+      image: images.product3,
+      description: 'Oblong bag',
+      price: '6',
+    },
+    {
+      id: 5,
+      name: 'lamerei',
+      size: ['M', 'L', 'X'],
+      color: ['black', 'red', 'white'],
+      image: images.product2,
+      description: '21WN reversible angora cardigan',
+      price: '12',
+    },
+    {
+      id: 6,
+      name: 'lamerei',
+      size: ['M', 'L', 'X'],
+      color: ['black', 'red', 'white'],
+      image: images.product4,
+      description: '21WN reversible angora cardigan',
+      price: '23',
+    },
+  ],
+};

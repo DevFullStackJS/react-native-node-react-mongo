@@ -5,11 +5,8 @@ Ouvrir un terminal et acceder au racine de project
 - docker buildx install
 - docker-compose up -d --build
 
-# url front
-http://localhost:3000/
-
 # url bo
-http://localhost:4000/
+http://localhost:8008/
 
 # url swagger
 http://localhost:4000/api-docs/#/

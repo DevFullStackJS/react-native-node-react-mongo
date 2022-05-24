@@ -1,0 +1,19 @@
+enigmatic-sands-05854
+
+guarded-harbor-97396
+
+heroku stack:set container --app guarded-harbor-97396
+heroku container:login
+docker buildx build --platform linux/amd64 -t registry.heroku.com/guarded-harbor-97396/web .
+docker push registry.heroku.com/guarded-harbor-97396/web
+heroku container:release web -a guarded-harbor-97396
+heroku open -a guarded-harbor-97396
+
+# docker login --username=lahnjara0808@hotmail.com --password=d316165b-a8ba-4bd2-8011-28b27cc2c50b registry.heroku.com
+heroku logs --tail -a guarded-harbor-97396
+
+docker-compose -f docker-compose.yml up -d --build
+heroku stack:set container --app guarded-harbor-97396
+docker login --username=lahnjara0808@hotmail.com --password=d316165b-a8ba-4bd2-8011-28b27cc2c50b registry.heroku.com
+docker push registry.heroku.com/guarded-harbor-97396/web
+heroku container:release web -a guarded-harbor-97396
